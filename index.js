@@ -96,6 +96,7 @@ async function run() {
     const taskCount = parseInt(core.getInput('count', { required: false })) || 1;
     const taskOverrides = core.getInput('overrides', { required: false });
     const waitForTask = core.getInput('wait-for-task-completion', { required: false });
+    const taskNetworkConfiguration = core.getInput('network-configuration', { required: false });
     let waitForMinutes = parseInt(core.getInput('wait-for-minutes', { required: false })) || 30;
     if (waitForMinutes > MAX_WAIT_MINUTES) {
       waitForMinutes = MAX_WAIT_MINUTES;
@@ -119,7 +120,7 @@ async function run() {
     // Run the task with the task definition
     const clusterName = cluster ? cluster : 'default';
     const overrides = taskOverrides ? JSON.parse(taskOverrides) : {};
-    await runTask(ecs, clusterName, taskDefArn, taskCount, waitForTask, waitForMinutes, overrides);
+    await runTask(ecs, clusterName, taskDefArn, taskCount, waitForTask, waitForMinutes, overrides, taskNetworkConfiguration);
   }
   catch (error) {
     core.setFailed(error.message);
