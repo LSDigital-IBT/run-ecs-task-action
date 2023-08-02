@@ -5,14 +5,15 @@ const MAX_WAIT_MINUTES = 360;  // 6 hours
 const WAIT_DEFAULT_DELAY_SEC = 15;
 
 // Run task in cluster that uses the 'ECS' deployment controller
-async function runTask(ecs, clusterName, taskDefArn, taskCount, waitForTask, waitForMinutes, taskOverrides) {
+async function runTask(ecs, clusterName, taskDefArn, taskCount, waitForTask, waitForMinutes, taskOverrides, taskNetworkConfiguration) {
   core.debug('Starting the task');
   let runTaskResponse;
   runTaskResponse = await ecs.runTask({
     cluster: clusterName,
     taskDefinition: taskDefArn,
     count: taskCount,
-    overrides: taskOverrides
+    overrides: taskOverrides,
+    networkConfiguration: taskNetworkConfiguration
   }).promise();
 
   if (runTaskResponse.failures && runTaskResponse.failures.length > 0) {
